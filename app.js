@@ -25,7 +25,8 @@ app.use(express.urlencoded({ extended: true })); // Parse URL-encoded data
 
 // Import routes
 const movieRoutes = require("./routes/movieRoutes");
-const authRoutes = require("./routes/authRoutes");
+const authRoutes = require("./routes/authRoutes").default;
+const { table } = require("console");
 
 // Swagger setup
 const swaggerOptions = {

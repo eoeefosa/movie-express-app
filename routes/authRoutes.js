@@ -1,6 +1,6 @@
-const express = require('express');
+const express = require("express");
 const router = express.Router();
-const authController = require('../controllers/authController');
+const authController = require("../controllers/authController");
 
 /**
  * @swagger
@@ -29,7 +29,7 @@ const authController = require('../controllers/authController');
  *       500:
  *         description: Failed to register user
  */
-router.post('/register', authController.register);
+router.post("/register", authController.register);
 
 /**
  * @swagger
@@ -56,6 +56,6 @@ router.post('/register', authController.register);
  *       500:
  *         description: Failed to login
  */
-router.post('/login', authController.login);
+router.post("/login", authController.login);
 
 module.exports = router;
