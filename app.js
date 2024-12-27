@@ -1,6 +1,5 @@
 // Import dependencies
 const express = require("express");
-const mongoose = require("mongoose");
 const dotenv = require("dotenv");
 const cors = require("cors");
 const path = require("path");
@@ -16,7 +15,7 @@ const app = express();
 
 // Connect to MongoDB
 connectDB();
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 5000;
 
 // Middleware
 app.use(express.json()); // Parse JSON data in requests
@@ -25,8 +24,7 @@ app.use(express.urlencoded({ extended: true })); // Parse URL-encoded data
 
 // Import routes
 const movieRoutes = require("./routes/movieRoutes");
-const authRoutes = require("./routes/authRoutes").default;
-const { table } = require("console");
+const authRoutes = require("./routes/authRoutes");
 
 // Swagger setup
 const swaggerOptions = {
