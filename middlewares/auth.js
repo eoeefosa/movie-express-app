@@ -1,16 +1,17 @@
-const jwt = require('jsonwebtoken');
-require('dotenv').config();
+import multer from "multer";
+import path from "path";
 
-exports.verifyToken = (req, res, next) => {
-  const token = req.header('Authorization')?.split(' ')[1];
-  
-  if (!token) return res.status(401).json({ message: 'Access denied, no token provided' });
+// Configure storage for multer
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, "uploads/"); // Set upload destination
+  },
+  filename: (req, file, cb) => {
+    cb(null, Date.now() + path.extname(file.originalname)); // Append timestamp to filename
+  },
+});
 
-  try {
-    const decoded = jwt.verify(token, process.env.JWT_SECRET);
-    req.user = decoded; // Add user info to request object
-    next();
-  } catch (error) {
-    res.status(401).json({ message: 'Invalid token' });
-  }
-};
+// Initialize multer with the configured storage
+const upload = multer({ storage });
+
+export default upload;

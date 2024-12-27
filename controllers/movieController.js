@@ -1,8 +1,8 @@
-const Movie = require("../models/Movie");
-const cloudinary = require("../config/cloudinary");
+import Movie from "../models/Movie.js";
+import cloudinary from "../config/cloudinary.js";
 
 // Upload movie
-exports.uploadMovie = async (req, res) => {
+export const uploadMovie = async (req, res) => {
   try {
     const result = await cloudinary.uploader.upload(req.file.path, {
       resource_type: "video",
@@ -25,14 +25,21 @@ exports.uploadMovie = async (req, res) => {
 };
 
 // Stream movie
-exports.streamMovie = async (req, res) => {
-  const { id } = req.params;
-  const movie = await Movie.findById(id);
-  if (movie) res.redirect(movie.url);
-  else res.status(404).json({ error: "Movie not found" });
+export const streamMovie = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const movie = await Movie.findById(id);
+
+    if (!movie) return res.status(404).json({ error: "Movie not found" });
+
+    res.redirect(movie.url);
+  } catch (error) {
+    res.status(500).json({ error: "Failed to stream movie" });
+  }
 };
 
-exports.downloadMovie = async (req, res) => {
+// Download movie
+export const downloadMovie = async (req, res) => {
   try {
     const { id } = req.params;
     const movie = await Movie.findById(id);
@@ -45,7 +52,8 @@ exports.downloadMovie = async (req, res) => {
   }
 };
 
-exports.viewMovies = async (req, res) => {
+// View movies with pagination
+export const viewMovies = async (req, res) => {
   try {
     const page = parseInt(req.query.page) || 1;
     const limit = parseInt(req.query.limit) || 10;
@@ -59,7 +67,8 @@ exports.viewMovies = async (req, res) => {
   }
 };
 
-exports.searchMovies = async (req, res) => {
+// Search movies
+export const searchMovies = async (req, res) => {
   try {
     const { query } = req.query;
     const movies = await Movie.find({
@@ -73,4 +82,12 @@ exports.searchMovies = async (req, res) => {
   } catch (error) {
     res.status(500).json({ error: "Failed to search movies" });
   }
+};
+
+export default {
+  uploadMovie,
+  streamMovie,
+  downloadMovie,
+  viewMovies,
+  searchMovies,
 };

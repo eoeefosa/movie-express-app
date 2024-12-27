@@ -1,7 +1,9 @@
-const jwt = require("jsonwebtoken");
-require("dotenv").config();
+import jwt from "jsonwebtoken";
+import dotenv from "dotenv";
 
-exports.generateToken = (user) => {
+dotenv.config();
+
+export const generateToken = (user) => {
   return jwt.sign(
     {
       id: user._id,
@@ -13,10 +15,10 @@ exports.generateToken = (user) => {
   );
 };
 
-exports.verifyToken = (token) => {
+export const verifyToken = (token) => {
   try {
     return jwt.verify(token, process.env.JWT_SECRET);
   } catch (error) {
-    return null;
+    return null; // Return null if verification fails
   }
 };

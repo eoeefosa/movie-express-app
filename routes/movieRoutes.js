@@ -1,8 +1,10 @@
-const express = require("express");
+import express from "express";
+import movieController from "../controllers/movieController.js";
+import auth from "../middlewares/auth.js";
+import upload from "../middlewares/multer.js";
+
 const router = express.Router();
-const movieController = require("../controllers/movieController");
-const auth = require("../middlewares/auth");
-const upload = require("../middlewares/multer");
+
 /**
  * @swagger
  * /api/movies/upload:
@@ -37,13 +39,36 @@ const upload = require("../middlewares/multer");
  *       500:
  *         description: Server error
  */
-router.post(
-  "/upload",
-  auth.verifyToken,
-  upload.single("file"),
-  movieController.uploadMovie
-);
+// router.post(
+//   "/upload",
+//   auth.verifyToken,
+//   upload.single("file"),
+//   movieController.uploadMovie
+// );
+
+/**
+ * @swagger
+ * /api/movies/stream/{id}:
+ *   get:
+ *     summary: Stream a movie by ID
+ *     tags: [Movies]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         schema:
+ *           type: string
+ *         required: true
+ *         description: Movie ID
+ *     responses:
+ *       200:
+ *         description: Streaming the movie
+ *       404:
+ *         description: Movie not found
+ *       500:
+ *         description: Server error
+ */
 router.get("/stream/:id", movieController.streamMovie);
+
 /**
  * @swagger
  * /api/movies/search:
@@ -64,6 +89,7 @@ router.get("/stream/:id", movieController.streamMovie);
  *         description: Server error
  */
 router.get("/search", movieController.searchMovies);
+
 /**
  * @swagger
  * /api/movies/view:
@@ -114,4 +140,4 @@ router.get("/view", movieController.viewMovies);
  */
 router.get("/download/:id", movieController.downloadMovie);
 
-module.exports = router;
+export default router;

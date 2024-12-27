@@ -1,9 +1,10 @@
-const express = require("express");
+import express from "express";
+import movieController from "../controllers/movieController.js";
+import auth from "../middlewares/auth.js";
+
 const router = express.Router();
-const movieController = require("../controllers/movieController");
-const auth = require("../middlewares/auth");
 
 router.post("/upload", auth.verifyToken, movieController.uploadMovie);
 router.get("/stream/:id", movieController.streamMovie);
 
-module.exports = router;
+export default router;

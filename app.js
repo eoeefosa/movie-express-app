@@ -1,11 +1,12 @@
 // Import dependencies
-const express = require("express");
-const dotenv = require("dotenv");
-const cors = require("cors");
-const path = require("path");
-const connectDB = require("./config/db");
-const swaggerJsdoc = require("swagger-jsdoc");
-const swaggerUi = require("swagger-ui-express");
+import express from "express";
+import dotenv from "dotenv";
+import cors from "cors";
+import path from "path";
+import { fileURLToPath } from "url";
+import connectDB from "./config/db.js";
+import swaggerJsdoc from "swagger-jsdoc";
+import swaggerUi from "swagger-ui-express";
 
 // Initialize environment variables
 dotenv.config();
@@ -22,9 +23,13 @@ app.use(express.json()); // Parse JSON data in requests
 app.use(cors()); // Enable Cross-Origin Resource Sharing
 app.use(express.urlencoded({ extended: true })); // Parse URL-encoded data
 
+// Determine __dirname for ES module compatibility
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
 // Import routes
-const movieRoutes = require("./routes/movieRoutes");
-const authRoutes = require("./routes/authRoutes");
+import movieRoutes from "./routes/movieRoutes.js";
+import authRoutes from "./routes/authRoutes.js";
 
 // Swagger setup
 const swaggerOptions = {
@@ -41,7 +46,7 @@ const swaggerOptions = {
     },
     servers: [
       {
-        url: "http://localhost:" + PORT,
+        url: `http://localhost:${PORT}`,
         description: "Development server",
       },
     ],
@@ -64,10 +69,10 @@ app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocs));
 
 // Use routes
 app.use("/api/movies", movieRoutes);
-app.use("/api/auth", authRoutes); // Assuming there's a user authentication module
+app.use("/api/auth", authRoutes);
 
 // Static files for uploads (if needed for local testing)
-// app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
+app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 
 // Default Route
 app.get("/", (req, res) => {
