@@ -31,7 +31,6 @@ const __dirname = path.dirname(__filename);
 import movieRoutes from "./routes/movieRoutes.js";
 import authRoutes from "./routes/authRoutes.js";
 
-// Swagger setup
 const swaggerOptions = {
   definition: {
     openapi: "3.0.0",
@@ -46,8 +45,8 @@ const swaggerOptions = {
     },
     servers: [
       {
-        url: `http://localhost:${PORT}`,
-        description: "Development server",
+        url: process.env.BASE_URL || `http://localhost:${PORT}`,
+        description: "Production server",
       },
     ],
     components: {
@@ -61,12 +60,12 @@ const swaggerOptions = {
     },
     security: [{ bearerAuth: [] }],
   },
-  apis: ["./routes/*.js"],
+  apis: [path.join(__dirname, "routes/*.js")],
 };
 
+// Swagger setup
 const swaggerDocs = swaggerJsdoc(swaggerOptions);
-app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocs));
-
+app.use("/api-docs", cors(), swaggerUi.serve, swaggerUi.setup(swaggerDocs));
 // Use routes
 app.use("/api/movies", movieRoutes);
 app.use("/api/auth", authRoutes);
