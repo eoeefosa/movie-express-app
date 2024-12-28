@@ -45,7 +45,9 @@ const swaggerOptions = {
     },
     servers: [
       {
-        url: process.env.BASE_URL || `http://localhost:${PORT}`,
+        // url: process.env.BASE_URL || `http://localhost:${PORT}`,
+        url:
+          "https://movie-express-app.vercel.app/" ,
         description: "Production server",
       },
     ],

@@ -6,7 +6,7 @@ const doc = {
     title: "Movie Streaming API",
     description: "API for movie streaming and downloading",
   },
-  host: "localhost:5000",
+  host: "https://movie-express-app.vercel.app/",
   schemes: ["http"],
 };
 
